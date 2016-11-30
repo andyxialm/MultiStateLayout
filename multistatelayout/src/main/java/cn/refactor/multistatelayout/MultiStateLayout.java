@@ -50,6 +50,11 @@ public class MultiStateLayout extends FrameLayout {
     private View mErrorView;
     private View mNetworkErrorView;
 
+    private int mEmptyResId;
+    private int mErrorResId;
+    private int mLoadingResId;
+    private int mNetworkErrorResId;
+
     @IntDef({NORMAL, EMPTY, LOADING, ERROR, NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
     private  @interface State {}
@@ -77,16 +82,11 @@ public class MultiStateLayout extends FrameLayout {
 
     private void init(AttributeSet attrs) {
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.MultiStateLayout);
-        int emptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, -1);
-        int errorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, -1);
-        int loadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, -1);
-        int networkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, -1);
+        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, -1);
+        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, -1);
+        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, -1);
+        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, -1);
         ta.recycle();
-
-        mEmptyView = LayoutInflater.from(getContext()).inflate(emptyResId, null);
-        mErrorView = LayoutInflater.from(getContext()).inflate(errorResId, null);
-        mLoadingView = LayoutInflater.from(getContext()).inflate(loadingResId, null);
-        mNetworkErrorView = LayoutInflater.from(getContext()).inflate(networkErrorResId, null);
     }
 
     @Override
@@ -97,16 +97,6 @@ public class MultiStateLayout extends FrameLayout {
             throw new IllegalStateException("Expect to have one child.");
         }
         mContentView = getChildAt(NORMAL);
-
-        addView(mEmptyView);
-        addView(mErrorView);
-        addView(mLoadingView);
-        addView(mNetworkErrorView);
-
-        mEmptyView.setVisibility(GONE);
-        mErrorView.setVisibility(GONE);
-        mLoadingView.setVisibility(GONE);
-        mNetworkErrorView.setVisibility(GONE);
     }
 
     @SuppressLint("Assert")
@@ -148,19 +138,31 @@ public class MultiStateLayout extends FrameLayout {
     private void hideViewByState(@State int state) {
         switch (state) {
             case NORMAL:
-                mContentView.setVisibility(GONE);
+                if (null != mContentView) {
+                    mContentView.setVisibility(GONE);
+                }
                 break;
             case EMPTY:
-                mEmptyView.setVisibility(GONE);
+                if (null != mEmptyView) {
+                    mEmptyView.setVisibility(GONE);
+                }
                 break;
             case LOADING:
-                mLoadingView.setVisibility(GONE);
+                if (null != mLoadingView) {
+                    mLoadingView.setVisibility(GONE);
+                }
                 break;
             case ERROR:
-                mErrorView.setVisibility(GONE);
+                if (null != mErrorView) {
+                    mErrorView.setVisibility(GONE);
+                }
                 break;
             case NETWORK_ERROR:
-                mNetworkErrorView.setVisibility(GONE);
+                if (null != mNetworkErrorView) {
+                    mNetworkErrorView.setVisibility(GONE);
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -168,20 +170,66 @@ public class MultiStateLayout extends FrameLayout {
     private void showViewByState(@State int state) {
         switch (state) {
             case NORMAL:
-                mContentView.setVisibility(VISIBLE);
+                showContentView();
                 break;
             case EMPTY:
-                mEmptyView.setVisibility(VISIBLE);
+                showEmptyView();
                 break;
             case LOADING:
-                mLoadingView.setVisibility(VISIBLE);
+                showLoadingView();
                 break;
             case ERROR:
-                mErrorView.setVisibility(VISIBLE);
+                showErrorView();
                 break;
             case NETWORK_ERROR:
-                mNetworkErrorView.setVisibility(VISIBLE);
+                showNetworkErrorView();
                 break;
+            default:
+                break;
+        }
+    }
+
+    private void showContentView() {
+        mContentView.setVisibility(VISIBLE);
+    }
+
+    private void showEmptyView() {
+        if (null == mEmptyView && mEmptyResId > -1) {
+            mEmptyView = LayoutInflater.from(getContext()).inflate(mEmptyResId, this, false);//View.inflate(getContext(), mEmptyResId, this);
+            addView(mEmptyView, mEmptyView.getLayoutParams());
+        }
+        if (null != mEmptyView) {
+            mEmptyView.setVisibility(VISIBLE);
+        }
+    }
+
+    private void showLoadingView() {
+        if (null == mLoadingView && mLoadingResId > -1) {
+            mLoadingView = LayoutInflater.from(getContext()).inflate(mLoadingResId, this, false);
+            addView(mLoadingView, mLoadingView.getLayoutParams());
+        }
+        if (null != mLoadingView) {
+            mLoadingView.setVisibility(VISIBLE);
+        }
+    }
+
+    private void showErrorView() {
+        if (null == mErrorView && mErrorResId > -1) {
+            mErrorView = LayoutInflater.from(getContext()).inflate(mErrorResId, this, false);
+            addView(mErrorView, mErrorView.getLayoutParams());
+        }
+        if (null != mErrorView) {
+            mErrorView.setVisibility(VISIBLE);
+        }
+    }
+
+    private void showNetworkErrorView() {
+        if (null == mNetworkErrorView && mNetworkErrorResId > -1) {
+            mNetworkErrorView = LayoutInflater.from(getContext()).inflate(mNetworkErrorResId, this, false);
+            addView(mNetworkErrorView, mNetworkErrorView.getLayoutParams());
+        }
+        if (null != mNetworkErrorView) {
+            mNetworkErrorView.setVisibility(VISIBLE);
         }
     }
 }
