@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_normal"
+        android:title="Normal"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_empty"
+        android:title="Empty"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_loading"
+        android:title="Loading"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_error"
+        android:title="Error"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_network_error"
+        android:title="Network Error"
+        app:showAsAction="never"/>
+</menu>
