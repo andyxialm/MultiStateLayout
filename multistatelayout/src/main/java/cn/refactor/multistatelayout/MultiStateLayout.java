@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,11 +108,27 @@ public class MultiStateLayout extends FrameLayout {
         mCurState = state;
     }
 
+    public void setEmptyView(@LayoutRes int resId) {
+        if (null != mEmptyView) {
+            removeView(mEmptyView);
+            mEmptyView = null;
+        }
+        mEmptyResId = resId;
+    }
+
     public void setEmptyView(View emptyView) {
         removeView(mEmptyView);
         mEmptyView = emptyView;
         mEmptyView.setVisibility(GONE);
         addView(mEmptyView);
+    }
+
+    public void setLoadingView(@LayoutRes int resId) {
+        if (null != mLoadingView) {
+            removeView(mLoadingView);
+            mLoadingView = null;
+        }
+        mLoadingResId = resId;
     }
 
     public void setLoadingView(View loadingView) {
@@ -121,11 +138,27 @@ public class MultiStateLayout extends FrameLayout {
         addView(mLoadingView);
     }
 
+    public void setErrorView(@LayoutRes int resId) {
+        if (null != mErrorView) {
+            removeView(mErrorView);
+            mErrorView = null;
+        }
+        mErrorResId = resId;
+    }
+
     public void setErrorView(View errorView) {
         removeView(mErrorView);
         mErrorView = errorView;
         mErrorView.setVisibility(GONE);
         addView(mErrorView);
+    }
+
+    public void setNetworkErrorView(@LayoutRes int resId) {
+        if (null != mNetworkErrorView) {
+            removeView(mNetworkErrorView);
+            mNetworkErrorView = null;
+        }
+        mNetworkErrorResId = resId;
     }
 
     public void setNetworkErrorView(View networkErrorView) {
@@ -195,7 +228,7 @@ public class MultiStateLayout extends FrameLayout {
 
     private void showEmptyView() {
         if (null == mEmptyView && mEmptyResId > -1) {
-            mEmptyView = LayoutInflater.from(getContext()).inflate(mEmptyResId, this, false);//View.inflate(getContext(), mEmptyResId, this);
+            mEmptyView = LayoutInflater.from(getContext()).inflate(mEmptyResId, this, false);
             addView(mEmptyView, mEmptyView.getLayoutParams());
         }
         if (null != mEmptyView) {
