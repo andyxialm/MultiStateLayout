@@ -58,7 +58,7 @@ public class MultiStateLayout extends FrameLayout {
 
     @IntDef({NORMAL, EMPTY, LOADING, ERROR, NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
-    private  @interface State {}
+    private @interface State {}
 
     private @State int mCurState = NORMAL;
 
