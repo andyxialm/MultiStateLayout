@@ -100,6 +100,10 @@ public class MultiStateLayout extends FrameLayout {
         mContentView = getChildAt(NORMAL);
     }
 
+    /**
+     * set state
+     * @param state State
+     */
     @SuppressLint("Assert")
     public void setState(@State int state) {
         assert !(state < NORMAL || state > NETWORK_ERROR);
@@ -108,6 +112,10 @@ public class MultiStateLayout extends FrameLayout {
         mCurState = state;
     }
 
+    /**
+     * set empty view by resource id
+     * @param resId layout
+     */
     public void setEmptyView(@LayoutRes int resId) {
         if (null != mEmptyView) {
             removeView(mEmptyView);
@@ -116,6 +124,10 @@ public class MultiStateLayout extends FrameLayout {
         mEmptyResId = resId;
     }
 
+    /**
+     * set empty view by view that had created.
+     * @param emptyView view
+     */
     public void setEmptyView(View emptyView) {
         removeView(mEmptyView);
         mEmptyView = emptyView;
@@ -123,6 +135,25 @@ public class MultiStateLayout extends FrameLayout {
         addView(mEmptyView);
     }
 
+    /**
+     * return empty view
+     * @return view
+     */
+    public View getEmptyView() {
+        if (null == mEmptyView) {
+            if (mEmptyResId > -1) {
+                mEmptyView = LayoutInflater.from(getContext()).inflate(mEmptyResId, this, false);
+                addView(mEmptyView, mEmptyView.getLayoutParams());
+                mEmptyView.setVisibility(GONE);
+            }
+        }
+        return mEmptyView;
+    }
+
+    /**
+     * set loading view by resource id
+     * @param resId layout
+     */
     public void setLoadingView(@LayoutRes int resId) {
         if (null != mLoadingView) {
             removeView(mLoadingView);
@@ -131,6 +162,10 @@ public class MultiStateLayout extends FrameLayout {
         mLoadingResId = resId;
     }
 
+    /**
+     * set loading view by view that had created.
+     * @param loadingView view
+     */
     public void setLoadingView(View loadingView) {
         removeView(mLoadingView);
         mLoadingView = loadingView;
@@ -138,6 +173,25 @@ public class MultiStateLayout extends FrameLayout {
         addView(mLoadingView);
     }
 
+    /**
+     * return loading view
+     * @return view
+     */
+    public View getLoadingView() {
+        if (null == mLoadingView) {
+            if (mLoadingResId > -1) {
+                mLoadingView = LayoutInflater.from(getContext()).inflate(mLoadingResId, this, false);
+                addView(mLoadingView, mLoadingView.getLayoutParams());
+                mLoadingView.setVisibility(GONE);
+            }
+        }
+        return mLoadingView;
+    }
+
+    /**
+     * set error view by resource id
+     * @param resId layout
+     */
     public void setErrorView(@LayoutRes int resId) {
         if (null != mErrorView) {
             removeView(mErrorView);
@@ -146,6 +200,10 @@ public class MultiStateLayout extends FrameLayout {
         mErrorResId = resId;
     }
 
+    /**
+     * set error view by view that had created.
+     * @param errorView view
+     */
     public void setErrorView(View errorView) {
         removeView(mErrorView);
         mErrorView = errorView;
@@ -153,6 +211,25 @@ public class MultiStateLayout extends FrameLayout {
         addView(mErrorView);
     }
 
+    /**
+     * return error view
+     * @return view
+     */
+    public View getErrorView() {
+        if (null == mErrorView) {
+            if (mErrorResId > -1) {
+                mErrorView = LayoutInflater.from(getContext()).inflate(mErrorResId, this, false);
+                addView(mErrorView, mErrorView.getLayoutParams());
+                mErrorView.setVisibility(GONE);
+            }
+        }
+        return mErrorView;
+    }
+
+    /**
+     * set network error view by resource id
+     * @param resId layout
+     */
     public void setNetworkErrorView(@LayoutRes int resId) {
         if (null != mNetworkErrorView) {
             removeView(mNetworkErrorView);
@@ -161,11 +238,30 @@ public class MultiStateLayout extends FrameLayout {
         mNetworkErrorResId = resId;
     }
 
+    /**
+     * set network error view by view that had created.
+     * @param networkErrorView view
+     */
     public void setNetworkErrorView(View networkErrorView) {
         removeView(mNetworkErrorView);
         mNetworkErrorView = networkErrorView;
         mNetworkErrorView.setVisibility(GONE);
         addView(mNetworkErrorView);
+    }
+
+    /**
+     * return network error view
+     * @return view
+     */
+    public View getNetworkErrorView() {
+        if (null == mNetworkErrorView) {
+            if (mNetworkErrorResId > -1) {
+                mNetworkErrorView = LayoutInflater.from(getContext()).inflate(mNetworkErrorResId, this, false);
+                addView(mNetworkErrorView, mNetworkErrorView.getLayoutParams());
+                mNetworkErrorView.setVisibility(GONE);
+            }
+        }
+        return mNetworkErrorView;
     }
 
     private void hideViewByState(@State int state) {
@@ -200,6 +296,10 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * show view by current state
+     * @param state state
+     */
     private void showViewByState(@State int state) {
         switch (state) {
             case NORMAL:
@@ -222,10 +322,16 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * show content view
+     */
     private void showContentView() {
         mContentView.setVisibility(VISIBLE);
     }
 
+    /**
+     * show customize empty view
+     */
     private void showEmptyView() {
         if (null == mEmptyView && mEmptyResId > -1) {
             mEmptyView = LayoutInflater.from(getContext()).inflate(mEmptyResId, this, false);
@@ -236,6 +342,9 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * show customize loading view
+     */
     private void showLoadingView() {
         if (null == mLoadingView && mLoadingResId > -1) {
             mLoadingView = LayoutInflater.from(getContext()).inflate(mLoadingResId, this, false);
@@ -246,6 +355,9 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * show customize error view
+     */
     private void showErrorView() {
         if (null == mErrorView && mErrorResId > -1) {
             mErrorView = LayoutInflater.from(getContext()).inflate(mErrorResId, this, false);
@@ -256,6 +368,9 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * show customize network error view
+     */
     private void showNetworkErrorView() {
         if (null == mNetworkErrorView && mNetworkErrorResId > -1) {
             mNetworkErrorView = LayoutInflater.from(getContext()).inflate(mNetworkErrorResId, this, false);
@@ -265,4 +380,5 @@ public class MultiStateLayout extends FrameLayout {
             mNetworkErrorView.setVisibility(VISIBLE);
         }
     }
+
 }

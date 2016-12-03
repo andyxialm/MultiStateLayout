@@ -23,7 +23,7 @@
         state:empty_layout="@layout/layout_empty"
         state:loading_layout="@layout/layout_loading"
         state:error_layout="@layout/layout_error"
-        state:network_error_layout="@layout/layout_network_error">
+        state:network_error_layout="@layout/layout_custom_network_error">
 
         <TextView
             android:layout_width="wrap_content"

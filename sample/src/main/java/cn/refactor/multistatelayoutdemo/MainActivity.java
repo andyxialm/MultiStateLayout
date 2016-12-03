@@ -1,11 +1,12 @@
 package cn.refactor.multistatelayoutdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import cn.refactor.multistatelayout.MultiStateLayout;
 
@@ -56,14 +57,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        View customNetworkErrorView = View.inflate(this, R.layout.layout_custom_network_error, null);
-        mStateLayout.setNetworkErrorView(customNetworkErrorView);
-        customNetworkErrorView.findViewById(R.id.btn_reload).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mStateLayout.setState(MultiStateLayout.NORMAL);
-            }
-        });
+        View networkErrorView = mStateLayout.getNetworkErrorView();
+        if (null != mStateLayout.getNetworkErrorView()) {
+            networkErrorView.findViewById(R.id.btn_reload).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(MainActivity.this, getString(R.string.reload), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 }
