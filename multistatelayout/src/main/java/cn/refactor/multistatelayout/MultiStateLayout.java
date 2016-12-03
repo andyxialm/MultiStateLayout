@@ -45,6 +45,7 @@ public class MultiStateLayout extends FrameLayout {
     public static final int ERROR   = 3;
     public static final int NETWORK_ERROR = 4;
 
+    private static MultiStateConfiguration.Builder mCommonConfiguration;
     private View mContentView;
     private View mLoadingView;
     private View mEmptyView;
@@ -58,7 +59,8 @@ public class MultiStateLayout extends FrameLayout {
 
     @IntDef({NORMAL, EMPTY, LOADING, ERROR, NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
-    private @interface State {}
+    private @interface State {
+    }
 
     private @State int mCurState = NORMAL;
 
@@ -83,10 +85,10 @@ public class MultiStateLayout extends FrameLayout {
 
     private void init(AttributeSet attrs) {
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.MultiStateLayout);
-        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, -1);
-        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, -1);
-        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, -1);
-        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, -1);
+        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, getCommonLayoutResIdByState(EMPTY));
+        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, getCommonLayoutResIdByState(ERROR));
+        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, getCommonLayoutResIdByState(LOADING));
+        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, getCommonLayoutResIdByState(NETWORK_ERROR));
         ta.recycle();
     }
 
@@ -101,7 +103,17 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
+     * set common mCommonConfiguration settings
+     *
+     * @param builder MultiStateConfiguration.Builder
+     */
+    public static void setConfiguration(MultiStateConfiguration.Builder builder) {
+        mCommonConfiguration = builder;
+    }
+
+    /**
      * set state
+     *
      * @param state State
      */
     @SuppressLint("Assert")
@@ -114,6 +126,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set empty view by resource id
+     *
      * @param resId layout
      */
     public void setEmptyView(@LayoutRes int resId) {
@@ -126,6 +139,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set empty view by view that had created.
+     *
      * @param emptyView view
      */
     public void setEmptyView(View emptyView) {
@@ -137,6 +151,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * return empty view
+     *
      * @return view
      */
     public View getEmptyView() {
@@ -152,6 +167,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set loading view by resource id
+     *
      * @param resId layout
      */
     public void setLoadingView(@LayoutRes int resId) {
@@ -164,6 +180,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set loading view by view that had created.
+     *
      * @param loadingView view
      */
     public void setLoadingView(View loadingView) {
@@ -175,6 +192,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * return loading view
+     *
      * @return view
      */
     public View getLoadingView() {
@@ -190,6 +208,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set error view by resource id
+     *
      * @param resId layout
      */
     public void setErrorView(@LayoutRes int resId) {
@@ -202,6 +221,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set error view by view that had created.
+     *
      * @param errorView view
      */
     public void setErrorView(View errorView) {
@@ -213,6 +233,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * return error view
+     *
      * @return view
      */
     public View getErrorView() {
@@ -228,6 +249,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set network error view by resource id
+     *
      * @param resId layout
      */
     public void setNetworkErrorView(@LayoutRes int resId) {
@@ -240,6 +262,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set network error view by view that had created.
+     *
      * @param networkErrorView view
      */
     public void setNetworkErrorView(View networkErrorView) {
@@ -251,6 +274,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * return network error view
+     *
      * @return view
      */
     public View getNetworkErrorView() {
@@ -298,6 +322,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * show view by current state
+     *
      * @param state state
      */
     private void showViewByState(@State int state) {
@@ -381,4 +406,24 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * get common layout resource id by state except NORMAL(Content)
+     * @param state state
+     * @return resource id
+     */
+    private int getCommonLayoutResIdByState(@State int state) {
+        switch (state) {
+            case EMPTY:
+                return mCommonConfiguration.getCommonEmptyLayout();
+            case LOADING:
+                return mCommonConfiguration.getCommonLoadingLayout();
+            case ERROR:
+                return mCommonConfiguration.getCommonErrorLayout();
+            case NETWORK_ERROR:
+                return mCommonConfiguration.getCommonNetworkErrorLayout();
+            case NORMAL:
+                return -1;
+        }
+        return 0;
+    }
 }
