@@ -39,7 +39,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class MultiStateLayout extends FrameLayout {
 
-    public static final int NORMAL  = 0;
+    public static final int CONTENT = 0;
     public static final int EMPTY   = 1;
     public static final int LOADING = 2;
     public static final int ERROR   = 3;
@@ -57,12 +57,12 @@ public class MultiStateLayout extends FrameLayout {
     private int mLoadingResId;
     private int mNetworkErrorResId;
 
-    @IntDef({NORMAL, EMPTY, LOADING, ERROR, NETWORK_ERROR})
+    @IntDef({CONTENT, EMPTY, LOADING, ERROR, NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
     private @interface State {
     }
 
-    private @State int mCurState = NORMAL;
+    private @State int mCurState = CONTENT;
 
     public MultiStateLayout(Context context) {
         this(context, null);
@@ -99,7 +99,7 @@ public class MultiStateLayout extends FrameLayout {
         if (getChildCount() > 1) {
             throw new IllegalStateException("Expect to have one child.");
         }
-        mContentView = getChildAt(NORMAL);
+        mContentView = getChildAt(CONTENT);
     }
 
     /**
@@ -118,7 +118,7 @@ public class MultiStateLayout extends FrameLayout {
      */
     @SuppressLint("Assert")
     public void setState(@State int state) {
-        assert !(state < NORMAL || state > NETWORK_ERROR);
+        assert !(state < CONTENT || state > NETWORK_ERROR);
         hideViewByState(mCurState);
         showViewByState(state);
         mCurState = state;
@@ -290,7 +290,7 @@ public class MultiStateLayout extends FrameLayout {
 
     private void hideViewByState(@State int state) {
         switch (state) {
-            case NORMAL:
+            case CONTENT:
                 if (null != mContentView) {
                     mContentView.setVisibility(GONE);
                 }
@@ -327,7 +327,7 @@ public class MultiStateLayout extends FrameLayout {
      */
     private void showViewByState(@State int state) {
         switch (state) {
-            case NORMAL:
+            case CONTENT:
                 showContentView();
                 break;
             case EMPTY:
@@ -407,7 +407,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * get common layout resource id by state except NORMAL(Content)
+     * get common layout resource id by state except CONTENT(Content)
      * @param state state
      * @return resource id
      */
@@ -421,7 +421,7 @@ public class MultiStateLayout extends FrameLayout {
                 return mCommonConfiguration.getCommonErrorLayout();
             case NETWORK_ERROR:
                 return mCommonConfiguration.getCommonNetworkErrorLayout();
-            case NORMAL:
+            case CONTENT:
                 return -1;
         }
         return 0;

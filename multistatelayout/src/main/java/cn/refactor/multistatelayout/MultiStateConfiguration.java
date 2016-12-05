@@ -26,6 +26,7 @@ import android.support.annotation.LayoutRes;
 public class MultiStateConfiguration {
 
     public static class Builder {
+
         private int mEmptyResId   = -1;
         private int mErrorResId   = -1;
         private int mLoadingResId = -1;

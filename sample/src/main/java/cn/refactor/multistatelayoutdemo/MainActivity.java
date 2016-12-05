@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_normal:
-                        mStateLayout.setState(MultiStateLayout.NORMAL);
+                        mStateLayout.setState(MultiStateLayout.CONTENT);
                         break;
                     case R.id.menu_empty:
                         mStateLayout.setState(MultiStateLayout.EMPTY);
