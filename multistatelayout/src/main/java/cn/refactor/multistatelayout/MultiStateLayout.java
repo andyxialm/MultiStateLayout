@@ -98,8 +98,11 @@ public class MultiStateLayout extends FrameLayout {
 
         if (getChildCount() > 1) {
             throw new IllegalStateException("Expect to have one child.");
+        } else if (getChildCount() == 1) {
+            mContentView = getChildAt(CONTENT);
+        } else {
+            mContentView = null;
         }
-        mContentView = getChildAt(CONTENT);
     }
 
     /**
@@ -351,7 +354,9 @@ public class MultiStateLayout extends FrameLayout {
      * show content view
      */
     private void showContentView() {
-        mContentView.setVisibility(VISIBLE);
+        if (null != mContentView) {
+            mContentView.setVisibility(VISIBLE);
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 #MultiStateLayout
 [![](https://jitpack.io/v/andyxialm/MultiStateLayout.svg)](https://jitpack.io/#andyxialm/MultiStateLayout)
-<a href="http://www.methodscount.com/?lib=com.github.andyxialm%3AMultiStateLayout%3A0.0.1"><img src="https://img.shields.io/badge/Methods count-core: 60 | deps: 32-e91e63.svg"/></a>
+<a href="http://www.methodscount.com/?lib=com.github.andyxialm%3AMultiStateLayout%3A0.0.2"><img src="https://img.shields.io/badge/Methods count-core: 60 | deps: 32-e91e63.svg"/></a>
 
 A customize multiple state layout for Android.
 
@@ -21,7 +21,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.0.1'
+    compile 'com.github.andyxialm:MultiStateLayout:0.0.2'
 }
 ~~~
 
@@ -41,7 +41,7 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ~~~
 	
