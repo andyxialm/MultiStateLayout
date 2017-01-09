@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MultiStateLayout</string>
     <string name="reload">Click reload</string>
+    <string name="title_second">Second Activity</string>
 </resources>

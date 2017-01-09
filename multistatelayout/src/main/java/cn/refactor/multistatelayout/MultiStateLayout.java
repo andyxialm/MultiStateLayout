@@ -39,12 +39,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class MultiStateLayout extends FrameLayout {
 
-    public static final int CONTENT = 0;
-    public static final int EMPTY   = 1;
-    public static final int LOADING = 2;
-    public static final int ERROR   = 3;
-    public static final int NETWORK_ERROR = 4;
-
     private static MultiStateConfiguration.Builder mCommonConfiguration;
     private View mContentView;
     private View mLoadingView;
@@ -57,12 +51,17 @@ public class MultiStateLayout extends FrameLayout {
     private int mLoadingResId;
     private int mNetworkErrorResId;
 
-    @IntDef({CONTENT, EMPTY, LOADING, ERROR, NETWORK_ERROR})
+    @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
-    private @interface State {
+    public  @interface State {
+        int CONTENT = 0;
+        int EMPTY   = 1;
+        int LOADING = 2;
+        int ERROR   = 3;
+        int NETWORK_ERROR = 4;
     }
 
-    private @State int mCurState = CONTENT;
+    private @State int mCurState = State.CONTENT;
 
     public MultiStateLayout(Context context) {
         this(context, null);
@@ -85,10 +84,10 @@ public class MultiStateLayout extends FrameLayout {
 
     private void init(AttributeSet attrs) {
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.MultiStateLayout);
-        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, getCommonLayoutResIdByState(EMPTY));
-        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, getCommonLayoutResIdByState(ERROR));
-        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, getCommonLayoutResIdByState(LOADING));
-        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, getCommonLayoutResIdByState(NETWORK_ERROR));
+        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, getCommonLayoutResIdByState(State.EMPTY));
+        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, getCommonLayoutResIdByState(State.ERROR));
+        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, getCommonLayoutResIdByState(State.LOADING));
+        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, getCommonLayoutResIdByState(State.NETWORK_ERROR));
         ta.recycle();
     }
 
@@ -99,7 +98,7 @@ public class MultiStateLayout extends FrameLayout {
         if (getChildCount() > 1) {
             throw new IllegalStateException("Expect to have one child.");
         } else if (getChildCount() == 1) {
-            mContentView = getChildAt(CONTENT);
+            mContentView = getChildAt(State.CONTENT);
         } else {
             mContentView = null;
         }
@@ -121,7 +120,7 @@ public class MultiStateLayout extends FrameLayout {
      */
     @SuppressLint("Assert")
     public void setState(@State int state) {
-        assert !(state < CONTENT || state > NETWORK_ERROR);
+        assert !(state < State.CONTENT || state > State.NETWORK_ERROR);
         hideViewByState(mCurState);
         showViewByState(state);
         mCurState = state;
@@ -293,27 +292,27 @@ public class MultiStateLayout extends FrameLayout {
 
     private void hideViewByState(@State int state) {
         switch (state) {
-            case CONTENT:
+            case State.CONTENT:
                 if (null != mContentView) {
                     mContentView.setVisibility(GONE);
                 }
                 break;
-            case EMPTY:
+            case State.EMPTY:
                 if (null != mEmptyView) {
                     mEmptyView.setVisibility(GONE);
                 }
                 break;
-            case LOADING:
+            case State.LOADING:
                 if (null != mLoadingView) {
                     mLoadingView.setVisibility(GONE);
                 }
                 break;
-            case ERROR:
+            case State.ERROR:
                 if (null != mErrorView) {
                     mErrorView.setVisibility(GONE);
                 }
                 break;
-            case NETWORK_ERROR:
+            case State.NETWORK_ERROR:
                 if (null != mNetworkErrorView) {
                     mNetworkErrorView.setVisibility(GONE);
                 }
@@ -330,19 +329,19 @@ public class MultiStateLayout extends FrameLayout {
      */
     private void showViewByState(@State int state) {
         switch (state) {
-            case CONTENT:
+            case State.CONTENT:
                 showContentView();
                 break;
-            case EMPTY:
+            case State.EMPTY:
                 showEmptyView();
                 break;
-            case LOADING:
+            case State.LOADING:
                 showLoadingView();
                 break;
-            case ERROR:
+            case State.ERROR:
                 showErrorView();
                 break;
-            case NETWORK_ERROR:
+            case State.NETWORK_ERROR:
                 showNetworkErrorView();
                 break;
             default:
@@ -418,15 +417,15 @@ public class MultiStateLayout extends FrameLayout {
      */
     private int getCommonLayoutResIdByState(@State int state) {
         switch (state) {
-            case EMPTY:
+            case State.EMPTY:
                 return mCommonConfiguration.getCommonEmptyLayout();
-            case LOADING:
+            case State.LOADING:
                 return mCommonConfiguration.getCommonLoadingLayout();
-            case ERROR:
+            case State.ERROR:
                 return mCommonConfiguration.getCommonErrorLayout();
-            case NETWORK_ERROR:
+            case State.NETWORK_ERROR:
                 return mCommonConfiguration.getCommonNetworkErrorLayout();
-            case CONTENT:
+            case State.CONTENT:
                 return -1;
         }
         return 0;

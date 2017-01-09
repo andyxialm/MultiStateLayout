@@ -1,5 +1,6 @@
 package cn.refactor.multistatelayoutdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,19 +37,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_content:
-                        mStateLayout.setState(MultiStateLayout.CONTENT);
+                        mStateLayout.setState(MultiStateLayout.State.CONTENT);
                         break;
                     case R.id.menu_empty:
-                        mStateLayout.setState(MultiStateLayout.EMPTY);
+                        mStateLayout.setState(MultiStateLayout.State.EMPTY);
                         break;
                     case R.id.menu_loading:
-                        mStateLayout.setState(MultiStateLayout.LOADING);
+                        mStateLayout.setState(MultiStateLayout.State.LOADING);
                         break;
                     case R.id.menu_error:
-                        mStateLayout.setState(MultiStateLayout.ERROR);
+                        mStateLayout.setState(MultiStateLayout.State.ERROR);
                         break;
                     case R.id.menu_network_error:
-                        mStateLayout.setState(MultiStateLayout.NETWORK_ERROR);
+                        mStateLayout.setState(MultiStateLayout.State.NETWORK_ERROR);
                         break;
                     default:
                         break;
@@ -66,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    public void gotoSecond(View v) {
+        startActivity(new Intent(this, SecondActivity.class));
     }
 
 }
