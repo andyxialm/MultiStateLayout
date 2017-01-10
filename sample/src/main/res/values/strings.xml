@@ -1,5 +1,12 @@
 <resources>
+
     <string name="app_name">MultiStateLayout</string>
-    <string name="reload">Click reload</string>
     <string name="title_second">Second Activity</string>
+    <string name="reload">Click reload</string>
+    <string name="network_error">Network Error</string>
+
+    <string name="error">Error</string>
+    <string name="mock_text">Mock network error</string>
+    <string name="empty">Empty</string>
+
 </resources>

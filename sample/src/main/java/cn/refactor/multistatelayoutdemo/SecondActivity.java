@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import cn.refactor.multistatelayout.MultiStateLayout;
-
 
 /**
  * Created by andy (https://github.com/andyxialm)
@@ -18,11 +16,10 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        setupViews();
-    }
 
-    private void setupViews() {
-        MultiStateLayout multiStateLayout = (MultiStateLayout) findViewById(R.id.multi_state_layout);
-        multiStateLayout.setState(MultiStateLayout.State.EMPTY);
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, SecondFragment.newInstance())
+                .commit();
     }
 }
