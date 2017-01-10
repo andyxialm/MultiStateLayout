@@ -1,9 +1,14 @@
 <resources>
     <declare-styleable name="MultiStateLayout">
-        <attr name="empty_layout" format="reference"/>
-        <attr name="loading_layout" format="reference"/>
-        <attr name="error_layout" format="reference"/>
-        <attr name="network_error_layout" format="reference"/>
+
+        <attr name="animDuration" format="integer"/>
+        <attr name="animEnable" format="boolean"/>
+        <attr name="layout_empty" format="reference"/>
+
+        <attr name="layout_loading" format="reference"/>
+        <attr name="layout_error" format="reference"/>
+        <attr name="layout_network_error" format="reference"/>
+
         <attr name="state" format="enum">
             <enum name="normal"        value="0"/>
             <enum name="empty"         value="1"/>
@@ -11,5 +16,6 @@
             <enum name="error"         value="3"/>
             <enum name="network_error" value="4"/>
         </attr>
+
     </declare-styleable>
 </resources>

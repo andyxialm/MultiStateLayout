@@ -21,7 +21,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.0.2'
+    compile 'com.github.andyxialm:MultiStateLayout:0.0.3'
 }
 ~~~
 
@@ -41,7 +41,7 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 ~~~
 	
@@ -54,9 +54,11 @@ dependencies {
     xmlns:state="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    state:network_error_layout="@layout/layout_custom_network_error">
-
-    <!-- content layout -->
+    state:layout_network_error="@layout/layout_custom_network_error"
+    state:animEnable="true"
+    state:animDuration="500">
+	
+	<!-- content layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

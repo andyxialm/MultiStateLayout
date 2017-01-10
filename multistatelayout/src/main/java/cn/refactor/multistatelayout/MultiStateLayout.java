@@ -16,6 +16,7 @@
 
 package cn.refactor.multistatelayout;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
@@ -40,6 +42,9 @@ import java.lang.annotation.RetentionPolicy;
 public class MultiStateLayout extends FrameLayout {
 
     private static MultiStateConfiguration.Builder mCommonConfiguration;
+    private static final int DEFAULT_ANIM_DURATION   = 400;
+    private static final boolean DEFAULT_ANIM_ENABLE = true;
+
     private View mContentView;
     private View mLoadingView;
     private View mEmptyView;
@@ -51,7 +56,10 @@ public class MultiStateLayout extends FrameLayout {
     private int mLoadingResId;
     private int mNetworkErrorResId;
 
+    private int mAnimDuration;
+    private boolean mAnimEnable;
     private LayoutInflater mInflater;
+    private ObjectAnimator mAlphaAnimator;
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
@@ -86,10 +94,13 @@ public class MultiStateLayout extends FrameLayout {
 
     private void init(AttributeSet attrs) {
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.MultiStateLayout);
-        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_empty_layout, getCommonLayoutResIdByState(State.EMPTY));
-        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_error_layout, getCommonLayoutResIdByState(State.ERROR));
-        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_loading_layout, getCommonLayoutResIdByState(State.LOADING));
-        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_network_error_layout, getCommonLayoutResIdByState(State.NETWORK_ERROR));
+        mEmptyResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_empty, getCommonLayoutResIdByState(State.EMPTY));
+        mErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_error, getCommonLayoutResIdByState(State.ERROR));
+        mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_loading, getCommonLayoutResIdByState(State.LOADING));
+        mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_network_error, getCommonLayoutResIdByState(State.NETWORK_ERROR));
+
+        mAnimEnable = ta.getBoolean(R.styleable.MultiStateLayout_animEnable, DEFAULT_ANIM_ENABLE);
+        mAnimDuration = ta.getInt(R.styleable.MultiStateLayout_animDuration, DEFAULT_ANIM_DURATION);
         ta.recycle();
 
         mInflater = LayoutInflater.from(getContext());
@@ -106,6 +117,12 @@ public class MultiStateLayout extends FrameLayout {
         } else {
             mContentView = null;
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        clearTargetViewAnimation();
     }
 
     /**
@@ -125,6 +142,7 @@ public class MultiStateLayout extends FrameLayout {
     @SuppressLint("Assert")
     public void setState(@State int state) {
         assert !(state < State.CONTENT || state > State.NETWORK_ERROR);
+        clearTargetViewAnimation();
         hideViewByState(mCurState);
         showViewByState(state);
         mCurState = state;
@@ -306,6 +324,12 @@ public class MultiStateLayout extends FrameLayout {
         return mNetworkErrorView;
     }
 
+    private void clearTargetViewAnimation() {
+        if (null != mAlphaAnimator && mAlphaAnimator.isRunning()) {
+            mAlphaAnimator.cancel();
+        }
+    }
+
     private void hideViewByState(@State int state) {
         switch (state) {
             case State.CONTENT:
@@ -366,7 +390,21 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show content view
+     * start alpha animation
+     * @param targetView target view
+     */
+    private void execAlphaAnimation(View targetView) {
+        if (null == targetView) {
+            return;
+        }
+        mAlphaAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f);
+        mAlphaAnimator.setInterpolator(new AccelerateInterpolator());
+        mAlphaAnimator.setDuration(mAnimDuration);
+        mAlphaAnimator.start();
+    }
+
+    /**
+     * show content view without animation
      */
     private void showContentView() {
         if (null != mContentView) {
@@ -384,6 +422,9 @@ public class MultiStateLayout extends FrameLayout {
         }
         if (null != mEmptyView) {
             mEmptyView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(mEmptyView);
+            }
         } else {
             throw new NullPointerException("Expect to have an empty view.");
         }
@@ -399,6 +440,9 @@ public class MultiStateLayout extends FrameLayout {
         }
         if (null != mLoadingView) {
             mLoadingView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(mLoadingView);
+            }
         } else {
             throw new NullPointerException("Expect to have an loading view.");
         }
@@ -414,6 +458,9 @@ public class MultiStateLayout extends FrameLayout {
         }
         if (null != mErrorView) {
             mErrorView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(mErrorView);
+            }
         } else {
             throw new NullPointerException("Expect to have one error view.");
         }
@@ -429,6 +476,9 @@ public class MultiStateLayout extends FrameLayout {
         }
         if (null != mNetworkErrorView) {
             mNetworkErrorView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(mNetworkErrorView);
+            }
         } else {
             throw new NullPointerException("Expect to have one network error view.");
         }

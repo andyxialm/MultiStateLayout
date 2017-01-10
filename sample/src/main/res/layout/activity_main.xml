@@ -20,7 +20,7 @@
         xmlns:state="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        state:network_error_layout="@layout/layout_custom_network_error">
+        state:layout_network_error="@layout/layout_custom_network_error">
 
         <Button
             android:layout_width="wrap_content"
