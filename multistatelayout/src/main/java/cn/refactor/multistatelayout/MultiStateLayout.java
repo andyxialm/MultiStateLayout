@@ -324,7 +324,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Open/close optional animation
+     * open/close optional animation
      * @param animEnable open/close
      */
     @SuppressWarnings("unused")
@@ -333,7 +333,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Get animation status
+     * get animation status
      * @return enable
      */
     @SuppressWarnings("unused")
@@ -342,7 +342,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Set animation duration
+     * set animation duration
      * @param duration duration
      */
     @SuppressWarnings("unused")
@@ -351,7 +351,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Get animation duration
+     * get animation duration
      */
     @SuppressWarnings("unused")
     public int getAnimDuration() {
@@ -539,10 +539,18 @@ public class MultiStateLayout extends FrameLayout {
         return 0;
     }
 
+    /**
+     * get anim status from common settings
+     * @return animEnable
+     */
     private boolean isCommonAnimEnable() {
         return mCommonConfiguration != null && mCommonConfiguration.isAnimEnable();
     }
 
+    /**
+     * get anim duration from common settings
+     * @return animDuration
+     */
     private int getCommonAnimDuration() {
         return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
     }
