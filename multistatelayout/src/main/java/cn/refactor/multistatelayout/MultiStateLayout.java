@@ -41,10 +41,8 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class MultiStateLayout extends FrameLayout {
 
+    private static final int DEFAULT_ANIM_DURATION = 300;
     private static MultiStateConfiguration.Builder mCommonConfiguration;
-    private static final int DEFAULT_ANIM_DURATION   = 400;
-    private static final boolean DEFAULT_ANIM_ENABLE = true;
-
     private View mContentView;
     private View mLoadingView;
     private View mEmptyView;
@@ -63,7 +61,7 @@ public class MultiStateLayout extends FrameLayout {
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
-    public  @interface State {
+    public @interface State {
         int CONTENT = 0;
         int EMPTY   = 1;
         int LOADING = 2;
@@ -99,8 +97,8 @@ public class MultiStateLayout extends FrameLayout {
         mLoadingResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_loading, getCommonLayoutResIdByState(State.LOADING));
         mNetworkErrorResId = ta.getResourceId(R.styleable.MultiStateLayout_layout_network_error, getCommonLayoutResIdByState(State.NETWORK_ERROR));
 
-        mAnimEnable = ta.getBoolean(R.styleable.MultiStateLayout_animEnable, DEFAULT_ANIM_ENABLE);
-        mAnimDuration = ta.getInt(R.styleable.MultiStateLayout_animDuration, DEFAULT_ANIM_DURATION);
+        mAnimEnable = ta.getBoolean(R.styleable.MultiStateLayout_animEnable, isCommonAnimEnable());
+        mAnimDuration = ta.getInt(R.styleable.MultiStateLayout_animDuration, getCommonAnimDuration());
         ta.recycle();
 
         mInflater = LayoutInflater.from(getContext());
@@ -130,6 +128,7 @@ public class MultiStateLayout extends FrameLayout {
      *
      * @param builder MultiStateConfiguration.Builder
      */
+    @SuppressWarnings("unused")
     public static void setConfiguration(MultiStateConfiguration.Builder builder) {
         mCommonConfiguration = builder;
     }
@@ -324,6 +323,41 @@ public class MultiStateLayout extends FrameLayout {
         return mNetworkErrorView;
     }
 
+    /**
+     * Open/close optional animation
+     * @param animEnable open/close
+     */
+    @SuppressWarnings("unused")
+    public void setAnimEnable(boolean animEnable) {
+        mAnimEnable = animEnable;
+    }
+
+    /**
+     * Get animation status
+     * @return enable
+     */
+    @SuppressWarnings("unused")
+    public boolean isAnimEnable() {
+        return mAnimEnable;
+    }
+
+    /**
+     * Set animation duration
+     * @param duration duration
+     */
+    @SuppressWarnings("unused")
+    public void setAnimDuration(int duration) {
+        mAnimDuration = duration;
+    }
+
+    /**
+     * Get animation duration
+     */
+    @SuppressWarnings("unused")
+    public int getAnimDuration() {
+        return mAnimDuration;
+    }
+
     private void clearTargetViewAnimation() {
         if (null != mAlphaAnimator && mAlphaAnimator.isRunning()) {
             mAlphaAnimator.cancel();
@@ -492,16 +526,24 @@ public class MultiStateLayout extends FrameLayout {
     private int getCommonLayoutResIdByState(@State int state) {
         switch (state) {
             case State.EMPTY:
-                return mCommonConfiguration.getCommonEmptyLayout();
+                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonEmptyLayout();
             case State.LOADING:
-                return mCommonConfiguration.getCommonLoadingLayout();
+                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonLoadingLayout();
             case State.ERROR:
-                return mCommonConfiguration.getCommonErrorLayout();
+                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonErrorLayout();
             case State.NETWORK_ERROR:
-                return mCommonConfiguration.getCommonNetworkErrorLayout();
+                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonNetworkErrorLayout();
             case State.CONTENT:
                 return -1;
         }
         return 0;
+    }
+
+    private boolean isCommonAnimEnable() {
+        return mCommonConfiguration != null && mCommonConfiguration.isAnimEnable();
+    }
+
+    private int getCommonAnimDuration() {
+        return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
     }
 }
