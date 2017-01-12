@@ -1,6 +1,6 @@
 #MultiStateLayout
 [![](https://jitpack.io/v/andyxialm/MultiStateLayout.svg)](https://jitpack.io/#andyxialm/MultiStateLayout)
-<a href="http://www.methodscount.com/?lib=com.github.andyxialm%3AMultiStateLayout%3A0.0.2"><img src="https://img.shields.io/badge/Methods count-core: 60 | deps: 32-e91e63.svg"/></a>
+
 
 A customize multiple state layout for Android.
 
@@ -21,7 +21,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.0.3'
+    compile 'com.github.andyxialm:MultiStateLayout:0.0.4'
 }
 ~~~
 
@@ -41,10 +41,10 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 </dependency>
 ~~~
-	
+
 ##### Edit your layout XML:
 
 ~~~ xml
@@ -57,7 +57,7 @@ dependencies {
     state:layout_network_error="@layout/layout_custom_network_error"
     state:animEnable="true"
     state:animDuration="500">
-	
+
 	<!-- content layout -->
     <TextView
         android:layout_width="wrap_content"
@@ -82,6 +82,21 @@ public class App extends Application {
         MultiStateLayout.setConfiguration(builder);
     }
 }
+```
+
+##### How to change state?
+```java
+
+mMultiStateLayout.setState(MultiStateLayout.State.CONTENT);
+
+mMultiStateLayout.setState(MultiStateLayout.State.EMPTY);
+
+mMultiStateLayout.setState(MultiStateLayout.State.LOADING);
+
+mMultiStateLayout.setState(MultiStateLayout.State.ERROR);
+
+mMultiStateLayout.setState(MultiStateLayout.State.NETWORK_ERROR);
+
 ```
 
 ### License
