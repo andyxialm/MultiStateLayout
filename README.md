@@ -44,7 +44,7 @@ dependencies {
     <version>0.0.4</version>
 </dependency>
 ~~~
-	
+
 ##### Edit your layout XML:
 
 ~~~ xml
@@ -57,7 +57,7 @@ dependencies {
     state:layout_network_error="@layout/layout_custom_network_error"
     state:animEnable="true"
     state:animDuration="500">
-	
+
 	<!-- content layout -->
     <TextView
         android:layout_width="wrap_content"
