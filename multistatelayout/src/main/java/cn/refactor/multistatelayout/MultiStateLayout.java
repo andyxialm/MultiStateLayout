@@ -140,9 +140,19 @@ public class MultiStateLayout extends FrameLayout {
      */
     @SuppressLint("Assert")
     public void setState(@State int state) {
+        setState(state, false);
+    }
+
+    /**
+     * set state
+     * @param state State
+     * @param displayContentLayout display or conceal content layout
+     */
+    @SuppressLint("Assert")
+    public void setState(@State int state, boolean displayContentLayout) {
         assert !(state < State.CONTENT || state > State.NETWORK_ERROR);
         clearTargetViewAnimation();
-        hideViewByState(mCurState);
+        hideViewByState(mCurState, displayContentLayout);
         showViewByState(state);
         mCurState = state;
     }
@@ -364,11 +374,11 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
-    private void hideViewByState(@State int state) {
+    private void hideViewByState(@State int state, boolean displayContentLayout) {
         switch (state) {
             case State.CONTENT:
                 if (null != mContentView) {
-                    mContentView.setVisibility(GONE);
+                    mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
                 }
                 break;
             case State.EMPTY:
@@ -539,6 +549,10 @@ public class MultiStateLayout extends FrameLayout {
         return 0;
     }
 
+    /**
+     * get anim status from common settings
+     * @return animEnable
+     */
     private boolean isCommonAnimEnable() {
         return mCommonConfiguration != null && mCommonConfiguration.isAnimEnable();
     }
