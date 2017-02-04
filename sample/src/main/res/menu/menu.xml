@@ -21,4 +21,9 @@
         android:id="@+id/menu_network_error"
         android:title="Network Error"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_custom"
+        android:title="Custom"
+        app:showAsAction="never"/>
 </menu>

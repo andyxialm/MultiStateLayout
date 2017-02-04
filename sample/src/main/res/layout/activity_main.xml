@@ -24,11 +24,11 @@
         state:animEnable="true"
         state:animDuration="250">
 
-        <Button
+        <TextView
+            android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:onClick="gotoSecond"
             android:text="Go to second"/>
 
     </cn.refactor.multistatelayout.MultiStateLayout>

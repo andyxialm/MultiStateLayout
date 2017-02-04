@@ -25,6 +25,7 @@ import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -43,6 +44,8 @@ public class MultiStateLayout extends FrameLayout {
 
     private static final int DEFAULT_ANIM_DURATION = 300;
     private static MultiStateConfiguration.Builder mCommonConfiguration;
+    private SparseArray<View> mCustomStateViewArray;
+
     private View mContentView;
     private View mLoadingView;
     private View mEmptyView;
@@ -70,6 +73,8 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     private @State int mCurState = State.CONTENT;
+    private int mCurCustomStateKey;
+    private boolean mIsSystemState;
 
     public MultiStateLayout(Context context) {
         this(context, null);
@@ -88,6 +93,7 @@ public class MultiStateLayout extends FrameLayout {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MultiStateLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(attrs);
     }
 
     private void init(AttributeSet attrs) {
@@ -102,6 +108,7 @@ public class MultiStateLayout extends FrameLayout {
         ta.recycle();
 
         mInflater = LayoutInflater.from(getContext());
+        mCustomStateViewArray = new SparseArray<>();
     }
 
     @Override
@@ -152,9 +159,40 @@ public class MultiStateLayout extends FrameLayout {
     public void setState(@State int state, boolean displayContentLayout) {
         assert !(state < State.CONTENT || state > State.NETWORK_ERROR);
         clearTargetViewAnimation();
-        hideViewByState(mCurState, displayContentLayout);
+        if (mIsSystemState) {
+            hideViewByState(mCurState, displayContentLayout);
+        } else {
+            hideCustomViewByState(mCurCustomStateKey, displayContentLayout);
+        }
         showViewByState(state);
-        mCurState = state;
+    }
+
+    @SuppressWarnings("unused")
+    public void setCustomState(int customStateKey) {
+        setCustomState(customStateKey, false);
+    }
+
+    @SuppressWarnings("unused")
+    public void setCustomState(int customStateKey, boolean displayContentLayout) {
+        clearTargetViewAnimation();
+        if (mIsSystemState) {
+            hideViewByState(mCurState, displayContentLayout);
+        } else {
+            hideCustomViewByState(mCurCustomStateKey, displayContentLayout);
+        }
+        showCustomViewByState(customStateKey);
+    }
+
+    @SuppressWarnings("unused")
+    public void putCustomStateView(int customStateKey, View stateView) {
+        mCustomStateViewArray.put(customStateKey, stateView);
+        addView(stateView, stateView.getLayoutParams());
+        stateView.setVisibility(GONE);
+    }
+
+    @SuppressWarnings("unused")
+    public View findCustomStateViewByKey(int customStateKey) {
+        return mCustomStateViewArray.get(customStateKey);
     }
 
     /**
@@ -334,7 +372,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Open/close optional animation
+     * open/close optional animation
      * @param animEnable open/close
      */
     @SuppressWarnings("unused")
@@ -343,7 +381,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Get animation status
+     * get animation status
      * @return enable
      */
     @SuppressWarnings("unused")
@@ -352,7 +390,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Set animation duration
+     * set animation duration
      * @param duration duration
      */
     @SuppressWarnings("unused")
@@ -361,7 +399,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * Get animation duration
+     * get animation duration
      */
     @SuppressWarnings("unused")
     public int getAnimDuration() {
@@ -375,11 +413,12 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     private void hideViewByState(@State int state, boolean displayContentLayout) {
+        if (null != mContentView) {
+            mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
+        }
+
         switch (state) {
             case State.CONTENT:
-                if (null != mContentView) {
-                    mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
-                }
                 break;
             case State.EMPTY:
                 if (null != mEmptyView) {
@@ -403,6 +442,17 @@ public class MultiStateLayout extends FrameLayout {
                 break;
             default:
                 break;
+        }
+    }
+
+    private void hideCustomViewByState(int customStateKey, boolean displayContentLayout) {
+        if (null != mContentView) {
+            mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
+        }
+
+        View customStateView = findCustomStateViewByKey(customStateKey);
+        if (null != customStateView) {
+            customStateView.setVisibility(GONE);
         }
     }
 
@@ -431,6 +481,22 @@ public class MultiStateLayout extends FrameLayout {
             default:
                 break;
         }
+        mCurState = state;
+        mIsSystemState = true;
+    }
+
+    private void showCustomViewByState(int customStateKey) {
+
+        View customStateView = findCustomStateViewByKey(customStateKey);
+        if (null != customStateView) {
+            customStateView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(customStateView);
+            }
+        }
+
+        mCurCustomStateKey = customStateKey;
+        mIsSystemState = false;
     }
 
     /**
@@ -557,6 +623,10 @@ public class MultiStateLayout extends FrameLayout {
         return mCommonConfiguration != null && mCommonConfiguration.isAnimEnable();
     }
 
+    /**
+     * get anim duration from common settings
+     * @return animDuration
+     */
     private int getCommonAnimDuration() {
         return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
     }
