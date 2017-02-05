@@ -406,12 +406,20 @@ public class MultiStateLayout extends FrameLayout {
         return mAnimDuration;
     }
 
+    /**
+     * cancel animation
+     */
     private void clearTargetViewAnimation() {
         if (null != mAlphaAnimator && mAlphaAnimator.isRunning()) {
             mAlphaAnimator.cancel();
         }
     }
 
+    /**
+     * hide target view
+     * @param state state
+     * @param displayContentLayout display content layout
+     */
     private void hideViewByState(@State int state, boolean displayContentLayout) {
         if (null != mContentView) {
             mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
@@ -445,6 +453,11 @@ public class MultiStateLayout extends FrameLayout {
         }
     }
 
+    /**
+     * hide target view
+     * @param customStateKey custom state key
+     * @param displayContentLayout display content layout
+     */
     private void hideCustomViewByState(int customStateKey, boolean displayContentLayout) {
         if (null != mContentView) {
             mContentView.setVisibility(displayContentLayout ? VISIBLE : GONE);
@@ -485,8 +498,12 @@ public class MultiStateLayout extends FrameLayout {
         mIsSystemState = true;
     }
 
+    /**
+     * show custom view by the custom state key
+     *
+     * @param customStateKey custom state key
+     */
     private void showCustomViewByState(int customStateKey) {
-
         View customStateView = findCustomStateViewByKey(customStateKey);
         if (null != customStateView) {
             customStateView.setVisibility(VISIBLE);
