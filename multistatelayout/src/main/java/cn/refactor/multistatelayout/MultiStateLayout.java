@@ -60,7 +60,9 @@ public class MultiStateLayout extends FrameLayout {
     private int mAnimDuration;
     private boolean mAnimEnable;
     private LayoutInflater mInflater;
+
     private ObjectAnimator mAlphaAnimator;
+    private TransitionAnimatorLoader mTransitionAnimatorLoader;
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
@@ -407,6 +409,13 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
+     * set transition animator
+     */
+    @SuppressWarnings("unused")
+    public void setTransitionAnimator(TransitionAnimatorLoader animatorLoader) {
+        mTransitionAnimatorLoader = animatorLoader;
+    }
+    /**
      * cancel animation
      */
     private void clearTargetViewAnimation() {
@@ -524,9 +533,14 @@ public class MultiStateLayout extends FrameLayout {
         if (null == targetView) {
             return;
         }
-        mAlphaAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f);
-        mAlphaAnimator.setInterpolator(new AccelerateInterpolator());
-        mAlphaAnimator.setDuration(mAnimDuration);
+
+        if (null == mTransitionAnimatorLoader || null == mTransitionAnimatorLoader.loadAnimator(targetView)) {
+            mAlphaAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f);
+            mAlphaAnimator.setInterpolator(new AccelerateInterpolator());
+            mAlphaAnimator.setDuration(mAnimDuration);
+        } else {
+            mAlphaAnimator = mTransitionAnimatorLoader.loadAnimator(targetView);
+        }
         mAlphaAnimator.start();
     }
 
@@ -647,4 +661,5 @@ public class MultiStateLayout extends FrameLayout {
     private int getCommonAnimDuration() {
         return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
     }
+
 }
