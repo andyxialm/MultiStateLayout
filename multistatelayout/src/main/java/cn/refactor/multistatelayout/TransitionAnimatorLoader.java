@@ -15,5 +15,5 @@ public interface TransitionAnimatorLoader {
      * @param targetView  target view
      * @return animator
      */
-    ObjectAnimator loadAnimator(View targetView);
+    ObjectAnimator onCreateAnimator(View targetView);
 }

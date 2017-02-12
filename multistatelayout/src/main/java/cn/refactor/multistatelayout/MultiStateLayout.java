@@ -534,12 +534,12 @@ public class MultiStateLayout extends FrameLayout {
             return;
         }
 
-        if (null == mTransitionAnimatorLoader || null == mTransitionAnimatorLoader.loadAnimator(targetView)) {
+        if (null == mTransitionAnimatorLoader || null == mTransitionAnimatorLoader.onCreateAnimator(targetView)) {
             mAlphaAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f);
             mAlphaAnimator.setInterpolator(new AccelerateInterpolator());
             mAlphaAnimator.setDuration(mAnimDuration);
         } else {
-            mAlphaAnimator = mTransitionAnimatorLoader.loadAnimator(targetView);
+            mAlphaAnimator = mTransitionAnimatorLoader.onCreateAnimator(targetView);
         }
         mAlphaAnimator.start();
     }
