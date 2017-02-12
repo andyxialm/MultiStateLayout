@@ -41,7 +41,7 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 </dependency>
 ~~~
 
@@ -99,7 +99,7 @@ mMultiStateLayout.setState(MultiStateLayout.State.NETWORK_ERROR);
 
 ```
 
-##### How to customise animation?
+##### How to customise transition animation?
 ```java
 mStateLayout.setTransitionAnimator(new TransitionAnimatorLoader() {
     @Override
