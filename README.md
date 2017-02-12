@@ -99,6 +99,19 @@ mMultiStateLayout.setState(MultiStateLayout.State.NETWORK_ERROR);
 
 ```
 
+##### How to customise animation?
+```java
+mStateLayout.setTransitionAnimator(new TransitionAnimatorLoader() {
+    @Override
+    public ObjectAnimator loadAnimator(View targetView) {
+        ObjectAnimator customAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f)
+                                                      .setDuration(500);
+        customAnimator.setInterpolator(new AccelerateInterpolator());
+        return customAnimator;
+    }
+});
+```
+
 ### License
 
     Copyright 2016 andy
