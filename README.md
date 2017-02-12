@@ -21,7 +21,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.0.4'
+    compile 'com.github.andyxialm:MultiStateLayout:0.0.5'
 }
 ~~~
 
