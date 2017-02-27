@@ -7,7 +7,7 @@
 
     <string name="error">Error</string>
     <string name="mock_text">Mock network error</string>
-    <string name="empty">Empty</string>
+    <string name="empty">NO DATA</string>
     <string name="notice_message">Notice Message</string>
 
 </resources>

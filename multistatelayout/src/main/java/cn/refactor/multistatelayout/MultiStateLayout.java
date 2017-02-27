@@ -185,11 +185,32 @@ public class MultiStateLayout extends FrameLayout {
         showCustomViewByState(customStateKey);
     }
 
+    /**
+     * Put customise state view by customise key
+     * @param customStateKey key
+     * @param stateView      view
+     */
     @SuppressWarnings("unused")
     public void putCustomStateView(int customStateKey, View stateView) {
         mCustomStateViewArray.put(customStateKey, stateView);
         addView(stateView, stateView.getLayoutParams());
         stateView.setVisibility(GONE);
+    }
+
+    /**
+     * @return current state value
+     */
+    @SuppressWarnings("unused")
+    public int getState() {
+        return mIsSystemState ? mCurState : mCurCustomStateKey;
+    }
+
+    /**
+     * @return current state is customise state
+     */
+    @SuppressWarnings("unused")
+    public boolean isCustomiseState() {
+        return !mIsSystemState;
     }
 
     @SuppressWarnings("unused")

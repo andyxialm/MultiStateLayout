@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         state:layout_network_error="@layout/layout_custom_network_error"
         state:animEnable="true"
-        state:animDuration="250">
+        state:animDuration="300">
 
         <TextView
             android:id="@+id/tv_content"

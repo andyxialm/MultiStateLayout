@@ -1,22 +1,21 @@
 package cn.refactor.multistatelayoutdemo;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
 
 import cn.refactor.multistatelayout.MultiStateLayout;
-import cn.refactor.multistatelayout.TransitionAnimatorLoader;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int KEY_CUSTOM_NOTICE = 1024;
 
     private MultiStateLayout mStateLayout;
@@ -55,16 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // setup custom notice message view
         View customNoticeMsgView = LayoutInflater.from(this).inflate(R.layout.layout_custom_notice, mStateLayout, false);
         mStateLayout.putCustomStateView(KEY_CUSTOM_NOTICE, customNoticeMsgView);
-
-        mStateLayout.setTransitionAnimator(new TransitionAnimatorLoader() {
-            @Override
-            public ObjectAnimator loadAnimator(View targetView) {
-                ObjectAnimator customAnimator = ObjectAnimator.ofFloat(targetView, "alpha", 0.0f, 1.0f)
-                                                              .setDuration(500);
-                customAnimator.setInterpolator(new AccelerateInterpolator());
-                return customAnimator;
-            }
-        });
     }
 
     private void setupToolbar() {
@@ -96,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     default:
                         break;
                 }
+                Log.d(TAG, String.valueOf(mStateLayout.getState()));
                 return true;
             }
         });
