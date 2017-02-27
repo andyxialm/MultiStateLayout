@@ -209,7 +209,7 @@ public class MultiStateLayout extends FrameLayout {
      * @return current state is customise state
      */
     @SuppressWarnings("unused")
-    public boolean isCustomiseState() {
+    public boolean isCustomizeState() {
         return !mIsSystemState;
     }
 
