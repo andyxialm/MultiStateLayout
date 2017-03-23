@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import cn.refactor.multistatelayout.MultiStateLayout;
+import cn.refactor.multistatelayout.OnViewCreatedListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,20 +41,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // setup toolbar
         setupToolbar();
 
-        // setup network error view
-        View networkErrorView = mStateLayout.getNetworkErrorView();
-        if (null != mStateLayout.getNetworkErrorView()) {
-            networkErrorView.findViewById(R.id.btn_reload).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(MainActivity.this, getString(R.string.reload), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
         // setup custom notice message view
         View customNoticeMsgView = LayoutInflater.from(this).inflate(R.layout.layout_custom_notice, mStateLayout, false);
         mStateLayout.putCustomStateView(KEY_CUSTOM_NOTICE, customNoticeMsgView);
+
+        // set view created listener
+        mStateLayout.setOnViewCreatedListener(new OnViewCreatedListener() {
+            @Override
+            public void onViewCreated(View view, int state) {
+                switch (state) {
+                    case MultiStateLayout.State.NETWORK_ERROR:
+                        view.findViewById(R.id.btn_reload).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(MainActivity.this, getString(R.string.reload), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     private void setupToolbar() {

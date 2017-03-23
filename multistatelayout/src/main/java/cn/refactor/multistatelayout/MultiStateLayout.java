@@ -1,17 +1,17 @@
-/**
- * Copyright 2016 andy
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+  Copyright 2016 andy
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
  */
 
 package cn.refactor.multistatelayout;
@@ -63,14 +63,15 @@ public class MultiStateLayout extends FrameLayout {
 
     private ObjectAnimator mAlphaAnimator;
     private TransitionAnimatorLoader mTransitionAnimatorLoader;
+    private OnViewCreatedListener mOnViewCreatedListener;
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
         int CONTENT = 0;
-        int EMPTY   = 1;
+        int EMPTY = 1;
         int LOADING = 2;
-        int ERROR   = 3;
+        int ERROR = 3;
         int NETWORK_ERROR = 4;
     }
 
@@ -143,6 +144,16 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
+     * set OnViewCreatedListener
+     *
+     * @param l OnViewCreatedListener
+     */
+    @SuppressWarnings("unused")
+    public void setOnViewCreatedListener(OnViewCreatedListener l) {
+        mOnViewCreatedListener = l;
+    }
+
+    /**
      * set state
      *
      * @param state State
@@ -154,7 +165,8 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set state
-     * @param state State
+     *
+     * @param state                State
      * @param displayContentLayout display or conceal content layout
      */
     @SuppressLint("Assert")
@@ -187,6 +199,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * Put customise state view by customise key
+     *
      * @param customStateKey key
      * @param stateView      view
      */
@@ -396,6 +409,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * open/close optional animation
+     *
      * @param animEnable open/close
      */
     @SuppressWarnings("unused")
@@ -405,6 +419,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * get animation status
+     *
      * @return enable
      */
     @SuppressWarnings("unused")
@@ -414,6 +429,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * set animation duration
+     *
      * @param duration duration
      */
     @SuppressWarnings("unused")
@@ -436,6 +452,7 @@ public class MultiStateLayout extends FrameLayout {
     public void setTransitionAnimator(TransitionAnimatorLoader animatorLoader) {
         mTransitionAnimatorLoader = animatorLoader;
     }
+
     /**
      * cancel animation
      */
@@ -447,7 +464,8 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * hide target view
-     * @param state state
+     *
+     * @param state                state
      * @param displayContentLayout display content layout
      */
     private void hideViewByState(@State int state, boolean displayContentLayout) {
@@ -485,7 +503,8 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * hide target view
-     * @param customStateKey custom state key
+     *
+     * @param customStateKey       custom state key
      * @param displayContentLayout display content layout
      */
     private void hideCustomViewByState(int customStateKey, boolean displayContentLayout) {
@@ -548,6 +567,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * start alpha animation
+     *
      * @param targetView target view
      */
     private void execAlphaAnimation(View targetView) {
@@ -581,6 +601,7 @@ public class MultiStateLayout extends FrameLayout {
         if (null == mEmptyView && mEmptyResId > -1) {
             mEmptyView = mInflater.inflate(mEmptyResId, this, false);
             addView(mEmptyView, mEmptyView.getLayoutParams());
+            callViewCreated(mEmptyView, State.EMPTY);
         }
         if (null != mEmptyView) {
             mEmptyView.setVisibility(VISIBLE);
@@ -599,6 +620,7 @@ public class MultiStateLayout extends FrameLayout {
         if (null == mLoadingView && mLoadingResId > -1) {
             mLoadingView = mInflater.inflate(mLoadingResId, this, false);
             addView(mLoadingView, mLoadingView.getLayoutParams());
+            callViewCreated(mLoadingView, State.LOADING);
         }
         if (null != mLoadingView) {
             mLoadingView.setVisibility(VISIBLE);
@@ -617,6 +639,7 @@ public class MultiStateLayout extends FrameLayout {
         if (null == mErrorView && mErrorResId > -1) {
             mErrorView = mInflater.inflate(mErrorResId, this, false);
             addView(mErrorView, mErrorView.getLayoutParams());
+            callViewCreated(mErrorView, State.ERROR);
         }
         if (null != mErrorView) {
             mErrorView.setVisibility(VISIBLE);
@@ -635,6 +658,7 @@ public class MultiStateLayout extends FrameLayout {
         if (null == mNetworkErrorView && mNetworkErrorResId > -1) {
             mNetworkErrorView = mInflater.inflate(mNetworkErrorResId, this, false);
             addView(mNetworkErrorView, mNetworkErrorView.getLayoutParams());
+            callViewCreated(mNetworkErrorView, State.NETWORK_ERROR);
         }
         if (null != mNetworkErrorView) {
             mNetworkErrorView.setVisibility(VISIBLE);
@@ -648,6 +672,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * get common layout resource id by state except CONTENT(Content)
+     *
      * @param state state
      * @return resource id
      */
@@ -669,6 +694,7 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * get anim status from common settings
+     *
      * @return animEnable
      */
     private boolean isCommonAnimEnable() {
@@ -677,10 +703,23 @@ public class MultiStateLayout extends FrameLayout {
 
     /**
      * get anim duration from common settings
+     *
      * @return animDuration
      */
     private int getCommonAnimDuration() {
         return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
+    }
+
+    /**
+     * called it on view created
+     *
+     * @param view  state view
+     * @param state state
+     */
+    private void callViewCreated(View view, int state) {
+        if (mOnViewCreatedListener != null) {
+            mOnViewCreatedListener.onViewCreated(view, state);
+        }
     }
 
 }
