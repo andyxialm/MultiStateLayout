@@ -1,4 +1,4 @@
-#MultiStateLayout
+# MultiStateLayout
 [![](https://jitpack.io/v/andyxialm/MultiStateLayout.svg)](https://jitpack.io/#andyxialm/MultiStateLayout)
 
 
@@ -29,10 +29,10 @@ dependencies {
 ##### Step 1. Add the JitPack repository to your build file
 ~~~ xml
 <repositories>
-	<repository>
-	    <id>jitpack.io</id>
-	    <url>https://jitpack.io</url>
-	</repository>
+    <repository>
+        <id>jitpack.io</id>
+	<url>https://jitpack.io</url>
+    </repository>
 </repositories>
 ~~~
 
@@ -58,7 +58,7 @@ dependencies {
     state:animEnable="true"
     state:animDuration="500">
 
-	<!-- content layout -->
+    <!-- content layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,6 +99,16 @@ mMultiStateLayout.setState(MultiStateLayout.State.NETWORK_ERROR);
 
 ```
 
+##### How to add customize state view?
+```java
+View customStateView = LayoutInflater.from(this).inflate(R.layout.layout_custom_notice, mStateLayout, false);
+mStateLayout.putCustomStateView(KEY_CUSTOM_STATE, customStateView);
+```
+##### Show customize state view.
+```java
+mStateLayout.setCustomState(KEY_CUSTOM_STATE);
+```
+
 ##### How to customise transition animation?
 ```java
 mStateLayout.setTransitionAnimator(new TransitionAnimatorLoader() {
@@ -114,7 +124,7 @@ mStateLayout.setTransitionAnimator(new TransitionAnimatorLoader() {
 
 ### License
 
-    Copyright 2016 andy
+    Copyright 2017 andy (https://github.com/andyxialm)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
