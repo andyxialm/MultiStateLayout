@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import cn.refactor.multistatelayout.MultiStateLayout;
-import cn.refactor.multistatelayout.OnViewCreatedListener;
+import cn.refactor.multistatelayout.OnStateViewCreatedListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStateLayout.putCustomStateView(KEY_CUSTOM_NOTICE, customNoticeMsgView);
 
         // set view created listener
-        mStateLayout.setOnViewCreatedListener(new OnViewCreatedListener() {
+        mStateLayout.setOnStateViewCreatedListener(new OnStateViewCreatedListener() {
             @Override
             public void onViewCreated(View view, int state) {
                 switch (state) {

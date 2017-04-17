@@ -16,20 +16,19 @@
 
 package cn.refactor.multistatelayout;
 
-import android.animation.ObjectAnimator;
 import android.view.View;
 
 /**
  * Created by andy (https://github.com/andyxialm)
- * Creation time: 17/2/9 18:15
- * Description: animator loader
+ * Creation time: 17/3/23 22:23
+ * Description: OnStateViewCreatedListener
  */
-public interface TransitionAnimatorLoader {
+public interface OnStateViewCreatedListener {
 
     /**
-     *
-     * @param targetView  target view
-     * @return animator
+     * Called on state view created.
+     * @param view  state view
+     * @param state state
      */
-    ObjectAnimator onCreateAnimator(View targetView);
+    void onViewCreated(View view, int state);
 }

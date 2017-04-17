@@ -1,5 +1,5 @@
 /*
-  Copyright 2016 andy
+  Copyright 2017 andy (https://github.com/andyxialm)
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class MultiStateLayout extends FrameLayout {
 
     private ObjectAnimator mAlphaAnimator;
     private TransitionAnimatorLoader mTransitionAnimatorLoader;
-    private OnViewCreatedListener mOnViewCreatedListener;
+    private OnStateViewCreatedListener mOnStateViewCreatedListener;
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
@@ -144,13 +144,13 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set OnViewCreatedListener
+     * set OnStateViewCreatedListener
      *
-     * @param l OnViewCreatedListener
+     * @param l OnStateViewCreatedListener
      */
     @SuppressWarnings("unused")
-    public void setOnViewCreatedListener(OnViewCreatedListener l) {
-        mOnViewCreatedListener = l;
+    public void setOnStateViewCreatedListener(OnStateViewCreatedListener l) {
+        mOnStateViewCreatedListener = l;
     }
 
     /**
@@ -679,13 +679,13 @@ public class MultiStateLayout extends FrameLayout {
     private int getCommonLayoutResIdByState(@State int state) {
         switch (state) {
             case State.EMPTY:
-                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonEmptyLayout();
+                return null == mCommonConfiguration ? -1 : mCommonConfiguration.getCommonEmptyLayout();
             case State.LOADING:
-                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonLoadingLayout();
+                return null == mCommonConfiguration ? -1 : mCommonConfiguration.getCommonLoadingLayout();
             case State.ERROR:
-                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonErrorLayout();
+                return null == mCommonConfiguration ? -1 : mCommonConfiguration.getCommonErrorLayout();
             case State.NETWORK_ERROR:
-                return mCommonConfiguration == null ? -1 : mCommonConfiguration.getCommonNetworkErrorLayout();
+                return null == mCommonConfiguration ? -1 : mCommonConfiguration.getCommonNetworkErrorLayout();
             case State.CONTENT:
                 return -1;
         }
@@ -698,7 +698,7 @@ public class MultiStateLayout extends FrameLayout {
      * @return animEnable
      */
     private boolean isCommonAnimEnable() {
-        return mCommonConfiguration != null && mCommonConfiguration.isAnimEnable();
+        return null != mCommonConfiguration && mCommonConfiguration.isAnimEnable();
     }
 
     /**
@@ -707,7 +707,7 @@ public class MultiStateLayout extends FrameLayout {
      * @return animDuration
      */
     private int getCommonAnimDuration() {
-        return mCommonConfiguration == null ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
+        return null == mCommonConfiguration ? DEFAULT_ANIM_DURATION : mCommonConfiguration.getAnimDuration();
     }
 
     /**
@@ -717,8 +717,8 @@ public class MultiStateLayout extends FrameLayout {
      * @param state state
      */
     private void callViewCreated(View view, int state) {
-        if (mOnViewCreatedListener != null) {
-            mOnViewCreatedListener.onViewCreated(view, state);
+        if (null != mOnStateViewCreatedListener) {
+            mOnStateViewCreatedListener.onViewCreated(view, state);
         }
     }
 
