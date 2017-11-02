@@ -22,7 +22,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.1.0'
+    compile 'com.github.andyxialm:MultiStateLayout:0.1.1'
 }
 ~~~
 
@@ -42,7 +42,7 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ~~~
 
@@ -118,6 +118,18 @@ mMultiStateLayout.setOnStateViewCreatedListener(new OnStateViewCreatedListener()
 
 ```
 
+##### Add a listener that will be invoked whenever the state view changes or is incrementally.
+```java
+
+mMultiStateLayout.addOnStateChangedListener(new OnStateChangedListener() {
+    @Override
+    public void onChanged(int state) {
+        
+    }
+});
+
+```
+
 ##### How to add customize state view?
 ```java
 View customStateView = LayoutInflater.from(this).inflate(R.layout.layout_custom_notice, mStateLayout, false);
@@ -165,7 +177,7 @@ allprojects {
 ##### Step 2. Add the dependency
 ~~~ xml
 dependencies {
-    compile 'com.github.andyxialm:MultiStateLayout:0.1.0'
+    compile 'com.github.andyxialm:MultiStateLayout:0.1.1'
 }
 ~~~
 
@@ -185,7 +197,7 @@ dependencies {
 <dependency>
     <groupId>com.github.andyxialm</groupId>
     <artifactId>MultiStateLayout</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ~~~
 
@@ -256,6 +268,18 @@ mMultiStateLayout.setOnStateViewCreatedListener(new OnStateViewCreatedListener()
             default:
                 break;
         }
+    }
+});
+
+```
+
+##### 监听状态改变
+```java
+
+mMultiStateLayout.addOnStateChangedListener(new OnStateChangedListener() {
+    @Override
+    public void onChanged(int state) {
+        
     }
 });
 

@@ -33,6 +33,8 @@ import android.widget.FrameLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -64,6 +66,7 @@ public class MultiStateLayout extends FrameLayout {
     private ObjectAnimator mAlphaAnimator;
     private TransitionAnimatorLoader mTransitionAnimatorLoader;
     private OnStateViewCreatedListener mOnStateViewCreatedListener;
+    private List<OnStateChangedListener> mOnStateChangedListeners;
 
     @IntDef({State.CONTENT, State.EMPTY, State.LOADING, State.ERROR, State.NETWORK_ERROR})
     @Retention(RetentionPolicy.SOURCE)
@@ -134,7 +137,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set common mCommonConfiguration settings
+     * Set common mCommonConfiguration settings
      *
      * @param builder MultiStateConfiguration.Builder
      */
@@ -144,7 +147,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set OnStateViewCreatedListener
+     * Set OnStateViewCreatedListener
      *
      * @param l OnStateViewCreatedListener
      */
@@ -154,7 +157,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set state
+     * Set state
      *
      * @param state State
      */
@@ -164,7 +167,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set state
+     * Set state
      *
      * @param state                State
      * @param displayContentLayout display or conceal content layout
@@ -211,7 +214,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * @return current state value
+     * @return Current state value
      */
     @SuppressWarnings("unused")
     public int getState() {
@@ -219,7 +222,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * @return current state is customise state
+     * @return Current state is customise state
      */
     @SuppressWarnings("unused")
     public boolean isCustomizeState() {
@@ -232,7 +235,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set empty view by resource id
+     * Set empty view by resource id
      *
      * @param resId layout
      */
@@ -246,7 +249,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set empty view by view that had created.
+     * Set empty view by view that had created.
      *
      * @param emptyView view
      */
@@ -259,7 +262,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * return empty view
+     * Return empty view
      *
      * @return view
      */
@@ -276,7 +279,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set loading view by resource id
+     * Set loading view by resource id
      *
      * @param resId layout
      */
@@ -290,7 +293,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set loading view by view that had created.
+     * Set loading view by view that had created.
      *
      * @param loadingView view
      */
@@ -303,7 +306,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * return loading view
+     * Return loading view
      *
      * @return view
      */
@@ -320,7 +323,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set error view by resource id
+     * Set error view by resource id
      *
      * @param resId layout
      */
@@ -334,7 +337,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set error view by view that had created.
+     * Set error view by view that had created.
      *
      * @param errorView view
      */
@@ -347,7 +350,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * return error view
+     * Return error view
      *
      * @return view
      */
@@ -364,7 +367,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set network error view by resource id
+     * Set network error view by resource id
      *
      * @param resId layout
      */
@@ -378,7 +381,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set network error view by view that had created.
+     * Set network error view by view that had created.
      *
      * @param networkErrorView view
      */
@@ -391,7 +394,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * return network error view
+     * Return network error view
      *
      * @return view
      */
@@ -408,7 +411,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * open/close optional animation
+     * Open/Close optional animation
      *
      * @param animEnable open/close
      */
@@ -418,7 +421,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * get animation status
+     * Get animation status
      *
      * @return enable
      */
@@ -428,7 +431,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set animation duration
+     * Set animation duration
      *
      * @param duration duration
      */
@@ -438,7 +441,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * get animation duration
+     * Get animation duration
      */
     @SuppressWarnings("unused")
     public int getAnimDuration() {
@@ -446,7 +449,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * set transition animator
+     * Set transition animator
      */
     @SuppressWarnings("unused")
     public void setTransitionAnimator(TransitionAnimatorLoader animatorLoader) {
@@ -454,7 +457,42 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * cancel animation
+     * Add OnStateChangedListener
+     *
+     * @param l OnStateChangedListener
+     */
+    @SuppressWarnings("unused")
+    public void addOnStateChangedListener(OnStateChangedListener l) {
+        if (mOnStateChangedListeners == null) {
+            mOnStateChangedListeners = new ArrayList<>();
+        }
+        mOnStateChangedListeners.add(l);
+    }
+
+    /**
+     * Remove OnStateChangedListener
+     *
+     * @param l OnStateChangedListener
+     */
+    @SuppressWarnings("unused")
+    public void removeOnStateChangedListener(OnStateChangedListener l) {
+        if (mOnStateChangedListeners != null) {
+            mOnStateChangedListeners.remove(l);
+        }
+    }
+
+    /**
+     * Remove all listener
+     */
+    @SuppressWarnings("unused")
+    public void clearOnStateChangedListeners() {
+        if (mOnStateChangedListeners != null) {
+            mOnStateChangedListeners.clear();
+        }
+    }
+
+    /**
+     * Cancel animation
      */
     private void clearTargetViewAnimation() {
         if (null != mAlphaAnimator && mAlphaAnimator.isRunning()) {
@@ -463,7 +501,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * hide target view
+     * Hide target view
      *
      * @param state                state
      * @param displayContentLayout display content layout
@@ -502,7 +540,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * hide target view
+     * Hide target view
      *
      * @param customStateKey       custom state key
      * @param displayContentLayout display content layout
@@ -519,7 +557,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show view by current state
+     * Show view by current state
      *
      * @param state state
      */
@@ -545,10 +583,23 @@ public class MultiStateLayout extends FrameLayout {
         }
         mCurState = state;
         mIsSystemState = true;
+        dispatchStateChangedAction(state);
     }
 
     /**
-     * show custom view by the custom state key
+     * Call onChanged(state) when state has changed.
+     * @param state state
+     */
+    private void dispatchStateChangedAction(int state) {
+        if (mOnStateChangedListeners != null && mOnStateChangedListeners.size() > 0) {
+            for (OnStateChangedListener onStateChangedListener : mOnStateChangedListeners) {
+                onStateChangedListener.onChanged(state);
+            }
+        }
+    }
+
+    /**
+     * Show custom view by the custom state key
      *
      * @param customStateKey custom state key
      */
@@ -563,10 +614,11 @@ public class MultiStateLayout extends FrameLayout {
 
         mCurCustomStateKey = customStateKey;
         mIsSystemState = false;
+        dispatchStateChangedAction(customStateKey);
     }
 
     /**
-     * start alpha animation
+     * Start alpha animation
      *
      * @param targetView target view
      */
@@ -586,7 +638,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show content view without animation
+     * Show content view without animation
      */
     private void showContentView() {
         if (null != mContentView) {
@@ -595,7 +647,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show customize empty view
+     * Show customize empty view
      */
     private void showEmptyView() {
         if (null == mEmptyView && mEmptyResId > -1) {
@@ -614,7 +666,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show customize loading view
+     * Show customize loading view
      */
     private void showLoadingView() {
         if (null == mLoadingView && mLoadingResId > -1) {
@@ -633,7 +685,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show customize error view
+     * Show customize error view
      */
     private void showErrorView() {
         if (null == mErrorView && mErrorResId > -1) {
@@ -652,7 +704,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * show customize network error view
+     * Show customize network error view
      */
     private void showNetworkErrorView() {
         if (null == mNetworkErrorView && mNetworkErrorResId > -1) {
@@ -671,7 +723,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * get common layout resource id by state except CONTENT(Content)
+     * Get common layout resource id by state except CONTENT(Content)
      *
      * @param state state
      * @return resource id
@@ -688,12 +740,13 @@ public class MultiStateLayout extends FrameLayout {
                 return null == mCommonConfiguration ? -1 : mCommonConfiguration.getCommonNetworkErrorLayout();
             case State.CONTENT:
                 return -1;
+            default:
+                return 0;
         }
-        return 0;
     }
 
     /**
-     * get anim status from common settings
+     * Get anim status from common settings
      *
      * @return animEnable
      */
@@ -702,7 +755,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * get anim duration from common settings
+     * Get anim duration from common settings
      *
      * @return animDuration
      */
@@ -711,7 +764,7 @@ public class MultiStateLayout extends FrameLayout {
     }
 
     /**
-     * called it on view created
+     * Called it on view created
      *
      * @param view  state view
      * @param state state
