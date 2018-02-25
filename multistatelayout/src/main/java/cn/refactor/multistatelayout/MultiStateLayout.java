@@ -643,6 +643,9 @@ public class MultiStateLayout extends FrameLayout {
     private void showContentView() {
         if (null != mContentView) {
             mContentView.setVisibility(VISIBLE);
+            if (mAnimEnable) {
+                execAlphaAnimation(mContentView);
+            }
         }
     }
 

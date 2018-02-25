@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import cn.refactor.multistatelayout.MultiStateLayout;
-import cn.refactor.multistatelayout.OnStateChangedListener;
 import cn.refactor.multistatelayout.OnStateViewCreatedListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
